@@ -6,4 +6,4 @@ title:
 
 ## zh
 
-position可以设置为right、alternate和left
+placement 可以设置为end、alternate和start

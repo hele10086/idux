@@ -3,8 +3,8 @@ import { defineComponent, h } from 'vue'
 
 import { renderWork } from '@tests'
 
-import IxTimeline from '../src/Timeline.vue'
-import IxTimelineItem from '../src/TimelineItem.vue'
+import IxTimeline from '../src/Timeline'
+import IxTimelineItem from '../src/TimelineItem'
 import { TimelineProps } from '../src/types'
 
 const TimelineDefaultSlots = defineComponent({
@@ -19,32 +19,35 @@ const TimelineDefaultSlots = defineComponent({
   },
 })
 
-describe.skip('Timeline', () => {
+describe('Timeline', () => {
   const TimelineMount = (options?: MountingOptions<Partial<TimelineProps>>) => mount(IxTimeline, { ...options })
 
   renderWork(IxTimeline)
 
-  test('position work', async () => {
+  test('placement work', async () => {
     const wrapper = TimelineMount({
       slots: {
         default: TimelineDefaultSlots,
       },
     })
+
+    expect(wrapper.html()).toMatchSnapshot()
+
     expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    expect(wrapper.findAll('.ix-timeline-item-right').length).toBe(4)
+    expect(wrapper.findAll('.ix-timeline-item-end').length).toBe(4)
     expect(wrapper.html()).toMatchSnapshot()
 
-    await wrapper.setProps({ position: 'left' })
-    expect(wrapper.findAll('.ix-timeline-item-left').length).toBe(4)
+    await wrapper.setProps({ placement: 'start' })
+    expect(wrapper.findAll('.ix-timeline-item-start').length).toBe(4)
     expect(wrapper.html()).toMatchSnapshot()
 
-    await wrapper.setProps({ position: 'alternate' })
-    expect(wrapper.findAll('.ix-timeline-item-left').length).toBe(2)
-    expect(wrapper.findAll('.ix-timeline-item-right').length).toBe(2)
+    await wrapper.setProps({ placement: 'alternate' })
+    expect(wrapper.findAll('.ix-timeline-item-start').length).toBe(2)
+    expect(wrapper.findAll('.ix-timeline-item-end').length).toBe(2)
     wrapper.findAll('.ix-timeline-item').forEach((item, index) => {
-      const position = index % 2 ? 'left' : 'right'
+      const placement = index % 2 ? 'start' : 'end'
 
-      expect(item.classes()).toContain(`ix-timeline-item-${position}`)
+      expect(item.classes()).toContain(`ix-timeline-item-${placement}`)
     })
     expect(wrapper.html()).toMatchSnapshot()
   })
@@ -175,28 +178,6 @@ describe.skip('Timeline', () => {
 
     await wrapper.setProps({ pendingDot: pendingDotText })
     expect(wrapper.findAll('.ix-timeline-item')[4].find('.ix-timeline-item-dot').text()).toBe(pendingDotText)
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-
-  test('pendingDot slot work', async () => {
-    const pendingDotSlotText = 'pendingDotSlotText'
-    const pendingDotText = 'pendingDotText'
-    const wrapper = TimelineMount({
-      slots: {
-        default: TimelineDefaultSlots,
-        pendingDot: pendingDotSlotText,
-      },
-      props: {
-        pending: true,
-      },
-    })
-
-    expect(wrapper.findAll('.ix-timeline-item')[4].find('.ix-timeline-item-dot').findAll('.ix-icon').length).toBe(0)
-    expect(wrapper.findAll('.ix-timeline-item')[4].find('.ix-timeline-item-dot').text()).toBe(pendingDotSlotText)
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({ pendingDot: pendingDotText })
-    expect(wrapper.findAll('.ix-timeline-item')[4].find('.ix-timeline-item-dot').text()).toBe(pendingDotSlotText)
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

@@ -1,29 +1,11 @@
 import { MountingOptions, mount } from '@vue/test-utils'
-import { PropType } from 'vue'
 
 import { renderWork } from '@tests'
 
-import IxTimeline from '../src/Timeline.vue'
-import IxTimelineItem from '../src/TimelineItem.vue'
-import { TimelineItemPosition, TimelineItemProps, TimelinePosition } from '../src/types'
+import IxTimelineItem from '../src/TimelineItem'
+import { TimelineItemProps } from '../src/types'
 
-const TestComponent = {
-  components: { IxTimeline, IxTimelineItem },
-  template: `
-    <IxTimeline :position="position">
-        <IxTimelineItem>0</IxTimelineItem>
-        <IxTimelineItem :position="itemPosition">1</IxTimelineItem>
-        <IxTimelineItem>2</IxTimelineItem>
-        <IxTimelineItem>3</IxTimelineItem>
-    </IxTimeline>
-    `,
-  props: {
-    position: { type: String as PropType<TimelinePosition>, default: undefined },
-    itemPosition: { type: String as PropType<TimelineItemPosition>, default: undefined },
-  },
-}
-
-describe.skip('TimelineItem', () => {
+describe('TimelineItem', () => {
   const timelineItemMount = (options?: MountingOptions<Partial<TimelineItemProps>>) =>
     mount(IxTimelineItem, { ...options })
   renderWork(IxTimelineItem)
@@ -79,68 +61,6 @@ describe.skip('TimelineItem', () => {
       dot: dotText,
     })
     expect(wrapper.find('.ix-timeline-item-dot').text()).toBe(dotSlotText)
-    expect(wrapper.html()).toMatchSnapshot()
-  })
-
-  test('position work', async () => {
-    const wrapper = mount(TestComponent)
-    expect(wrapper.classes()).toContain('ix-timeline-right')
-    expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    expect(wrapper.findAll('.ix-timeline-item-right').length).toBe(4)
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({
-      itemPosition: 'left',
-    })
-    expect(wrapper.classes()).toContain('ix-timeline-alternate')
-    expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    expect(wrapper.findAll('.ix-timeline-item-right').length).toBe(3)
-    expect(wrapper.findAll('.ix-timeline-item')[1].classes()).toContain('ix-timeline-item-left')
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({
-      position: 'left',
-      itemPosition: undefined,
-    })
-    expect(wrapper.classes()).toContain('ix-timeline-left')
-    expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    expect(wrapper.findAll('.ix-timeline-item-left').length).toBe(4)
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({
-      itemPosition: 'right',
-    })
-    expect(wrapper.classes()).toContain('ix-timeline-alternate')
-    expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    expect(wrapper.findAll('.ix-timeline-item-left').length).toBe(3)
-    expect(wrapper.findAll('.ix-timeline-item')[1].classes()).toContain('ix-timeline-item-right')
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({
-      position: 'alternate',
-      itemPosition: undefined,
-    })
-    expect(wrapper.classes()).toContain('ix-timeline-alternate')
-    expect(wrapper.findAll('.ix-timeline-item').length).toBe(4)
-    wrapper.findAll('.ix-timeline-item').forEach((item, index) => {
-      const position = index % 2 ? 'left' : 'right'
-
-      expect(item.classes()).toContain(`ix-timeline-item-${position}`)
-    })
-    expect(wrapper.html()).toMatchSnapshot()
-
-    await wrapper.setProps({
-      itemPosition: 'right',
-    })
-    wrapper.findAll('.ix-timeline-item').forEach((item, index) => {
-      const position = index % 2 ? 'left' : 'right'
-
-      if (index === 1) {
-        expect(item.classes()).toContain(`ix-timeline-item-right`)
-      } else {
-        expect(item.classes()).toContain(`ix-timeline-item-${position}`)
-      }
-    })
     expect(wrapper.html()).toMatchSnapshot()
   })
 })

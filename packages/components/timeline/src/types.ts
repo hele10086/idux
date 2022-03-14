@@ -10,13 +10,14 @@ import type { DefineComponent, HTMLAttributes } from 'vue'
 
 import { IxPropTypes } from '@idux/cdk/utils'
 
-export type TimelinePosition = 'left' | 'alternate' | 'right'
+export type TimelinePlacement = 'start' | 'alternate' | 'end'
 
 export const timelineProps = {
   pending: IxPropTypes.oneOfType([String, Boolean]).def(false),
   pendingDot: IxPropTypes.string,
   reverse: IxPropTypes.bool.def(false),
-  position: IxPropTypes.oneOf<TimelinePosition>(['left', 'alternate', 'right']).def('right'),
+  placement: IxPropTypes.oneOf<TimelinePlacement>(['start', 'alternate', 'end']).def('end'),
+  both: IxPropTypes.bool.def(true),
 }
 
 export type TimelineProps = ExtractInnerPropTypes<typeof timelineProps>
@@ -24,12 +25,10 @@ export type TimelinePublicProps = ExtractPublicPropTypes<typeof timelineProps>
 export type TimelineComponent = DefineComponent<Omit<HTMLAttributes, keyof TimelinePublicProps> & TimelinePublicProps>
 export type TimelineInstance = InstanceType<DefineComponent<TimelineProps>>
 
-export type TimelineItemPosition = 'left' | 'right'
-
 export const timelineItemProps = {
   color: IxPropTypes.string.def('primary'),
   dot: IxPropTypes.string,
-  position: IxPropTypes.oneOf<TimelineItemPosition>(['left', 'right']),
+  label: IxPropTypes.string,
 }
 
 export type TimelineItemProps = ExtractInnerPropTypes<typeof timelineItemProps>

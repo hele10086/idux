@@ -17,7 +17,8 @@ order: 0
 | `pending` | 设置幽灵节点 | `boolean\|string\|#pending` | `false` | - |- |
 | `pendingDot` | 幽灵节点存在时的时间轴点 | `string\|#pendingDot` | `undefined` | - |- |
 | `reverse` | 时间节点是否倒叙 | `boolean` | `false` | - |- |
-| `position` | 时间轴和内容的相对位置 | `left\|alternate\|right` | `right` | - |- |
+| `placement` | 时间节点内容的位置 | `start\|end\|alternate` | `undefined` | - |- |
+| `both` | 设置标签和内容是否分开 | `boolean` | `false` | - |- |
 
 ### IxTimelineItem
 
@@ -27,7 +28,7 @@ order: 0
 | --- | --- | --- | --- | --- | --- |
 | `color` | 时间节点颜色 | `PresetColor \| StatusColor \| string` | `primary` | - |- |
 | `dot` | 时间轴点 | `string\|#dot` | `undefined` | - |- |
-| `position` | 时间节点内容的位置 | `left\|right` | `undefined` | - |- |
+| `label` | 设置标签 | `string\|#label` | `undefined` | - |- |
 
 <!--- insert less variable begin  --->
 ## 主题变量
